@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:40:46 by levensta          #+#    #+#             */
-/*   Updated: 2020/11/29 22:42:07 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/02 22:09:44 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,26 +104,24 @@ char	*ft_substr(char const *s, unsigned int start, int len)
 	return (s2);
 }
 
-void		*ft_memchr(const void *s, int c, size_t n)
+void		*ft_memchr(const void *s, char c, size_t n)
 {
 	size_t	i;
 	char	*str;
-	char	ch;
 
 	if (n != 0)
 	{
 		i = -1;
 		str = (char *)s;
-		ch = (char)c;
 		while (++i < n)
-			if (str[i] == ch)
+			if (str[i] == c)
 				return (&str[i]);
 	}
 	return (NULL);
 }
 
 
-int			ft_strtrim(char *s1, char *set, int i, t_printf *specifer)
+int			ft_flgtrim(char *s1, char *set, int i, t_printf *specifer)
 {
 	unsigned int	start;
 
@@ -132,45 +130,74 @@ int			ft_strtrim(char *s1, char *set, int i, t_printf *specifer)
 		return (-1);
 	while (ft_memchr(set, s1[start], ft_strlen(set)))
 	{
-		start++;
 		if (specifer->flags)
 		{
 			free(specifer->flags);
 			specifer->flags = 0;
 		}
+		start++;
 		specifer->flags = ft_substr(s1, i, start - i);
 	}
-
+	// if (!(specifer->flags))
+	// 	specifer->flags = ft_strdup("");
 	return (start);
 }
 
-int			ft_atoi(const char *str)
+int			ft_tptrim(char *s1, char *set, int i, t_printf *specifer) // доделать
+{
+	if (!s1 || !set)
+		return (-1);
+	if (ft_memchr(set, s1[i], ft_strlen(set)))
+	{
+		specifer->type = s1[i];
+		i++;
+		return (i);
+	}
+	return (-1);
+}
+
+int			ft_atoi_w(const char *str)
 {
 	int i;
 	int nb;
-	int check_symbol;
 	int amount;
 
 	i = 0;
 	nb = 0;
-	check_symbol = 1;
 	amount = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
-	|| str[i] == '\v' || str[i] == '\r' || str[i] == '\f')
-		i++;
-	if (str[i] == '+')
-		i++;
-	else if (str[i] == '-' && ++i)
-		check_symbol = -1;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		nb = (nb * 10) + (str[i] - '0');
 		amount += (nb == 0) ? 0 : 1;
 		if (amount > 19)
-			return ((check_symbol > 0) ? -1 : 0);
+			return (-1);
 		i++;
 	}
-	return (nb * check_symbol);
+	return (nb);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*str;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	if (!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
+		return (NULL);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+		str[i++] = s2[j++];
+	str[i] = '\0';
+	free(s1);
+	return (str);
 }
 
 int			ft_nlen(int n)
@@ -186,6 +213,17 @@ int			ft_nlen(int n)
 		n = (n / 10);
 	return (i);
 }
+
+	void	free_spec(t_printf *specifier)
+	{
+		// if (specifier->flags)
+		// 	free(specifier->flags);
+		specifier->flags = 0;
+		specifier->width = 0;
+		specifier->precis = 0;
+		specifier->type = 0;
+	}
+
 
 // int		ft_printf(const char *s, ...)
 // {

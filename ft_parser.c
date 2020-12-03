@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 16:40:00 by levensta          #+#    #+#             */
-/*   Updated: 2020/11/29 23:32:29 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/03 23:30:03 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,40 +20,64 @@ int	ft_parser(char *format)
 	int		n;
 
 	i = 0;
-	specifier.flags = 0;
+	n = -1;
+	free_spec(&specifier);
 	while (format[i])
 	{
 		if (format[i] != '%')
 		{
 			i = tofind_c(format, '%');
-			while (format[i] != '%')
-				write(1, &format[i], 1);
+			while (++n < i)
+				write(1, &format[n], 1);
+
 		}
 		i++;
-		i = ft_strtrim(format, " 0+-#", i, &specifier); // flags
-		if (format[i] == '*') // width
-			n = va_arg(ptr, int);
-		if (n < 0)
-			n *= -1;
-		//добавить минус во флаг
+		i = ft_flgtrim(format, " 0+-", i, &specifier); // flags
 
-		specifier.width = ft_atoi(&format[i]);
-		i = i + 1 + ft_nlen(ft_atoi(&format[i]));
-		specifier.precis = ft_atoi(&format[i]);
-		i = i + ft_nlen(ft_atoi(&format[i]));
+//			Ширина			 //
+		if (format[i] == '*')
+		{
+			specifier.width = va_arg(g_ptr, int);
+			if (specifier.width < 0)
+			{
+				specifier.flags = ft_strjoin(specifier.flags, "-");
+				specifier.width *= -1;
+			}
+			i++;
+		}
+		else if ((specifier.width = ft_atoi_w(&format[i])) != -1)
+			i = i + ft_nlen(ft_atoi_w(&format[i]));
+
+//			Точность		//
+		if (format[i] == '.')
+		{
+			i++;
+			if (format[i] == '*')
+			{
+				specifier.precis = va_arg(g_ptr, int); // обработать 0 и - в processor
+				i++;
+			}
+			else if ((specifier.precis = ft_atoi_w(&format[i])) != -1)
+				i = i + ft_nlen(ft_atoi_w(&format[i]));
+		}
+
+//			записать тип и само значение 
+		if ((i = ft_tptrim(format, "cspdiuxX%", i, &specifier)) == -1)
+		{
+			va_end(g_ptr);
+			write(1, "WARNING\n", 8);
+			return (-1);
+		}
+		else
+		{
+			va_arg(g_ptr,);
+		}
+		
+		
 	}
-	// printf("%s\n", specifier.flags);
-	// printf("%zu\n", specifier.width);
-	// printf("%zu\n", specifier.precis);
-	return (0);
-}
-
-int main()
-{
-	// char *s = "Hello!";
-	// printf( "%.5s = %0*.*f", "value trash", 10, 5, M_PI );
-	// printf("%0 *.18d",2147483647+10, 189);
-	int x = 4;
-	printf("%*.5d|\n",-10, x);
+	printf("%s\n", specifier.flags);
+	printf("%d\n", specifier.width);
+	printf("%d\n", specifier.precis);
+	printf("%c\n", specifier.type);
 	return (0);
 }
