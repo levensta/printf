@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:40:46 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/02 22:09:44 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/04 22:33:17 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,12 +216,19 @@ int			ft_nlen(int n)
 
 	void	free_spec(t_printf *specifier)
 	{
-		// if (specifier->flags)
-		// 	free(specifier->flags);
+		if (specifier->flags)
+			free(specifier->flags);
 		specifier->flags = 0;
 		specifier->width = 0;
 		specifier->precis = 0;
 		specifier->type = 0;
+		specifier->values.di = 0;
+		specifier->values.u = 0;
+		specifier->values.c = 0;
+		if (specifier->values.s)
+			free(specifier->values.s);
+		specifier->values.s = 0;
+		specifier->values.p = 0;
 	}
 
 

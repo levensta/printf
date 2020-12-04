@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 21:34:21 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/03 23:28:17 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/04 22:51:15 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,27 @@
 
 va_list		g_ptr;
 
+typedef struct	content
+{
+	int				di;
+	unsigned int	u;
+	char			c;
+	char*			s;
+	long long		p;
+	// unsigned int	x;
+	// unsigned int	X;
+}				t_content;
+
 typedef struct	s_printf
 {
-	char	*flags;
-	int		width;
-	int		precis;
-	char	type;
-	void	*content;
+	char		*flags;
+	int			width;
+	int			precis;
+	char		type;
+	t_content	values;
 }				t_printf;
+
+
 
 int		ft_printf(const char *format, ...);
 size_t	ft_strlen(const char *str);
@@ -42,4 +55,5 @@ int		ft_parser(char *format);
 int		ft_atoi_w(const char *str);
 int		ft_nlen(int n);
 void	free_spec(t_printf *specifier);
+int		get_value(t_printf *specifier);
 #endif

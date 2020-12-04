@@ -33,6 +33,6 @@ int main()
 {
 	// char *s = "Hello!";
 	// printf( "%.5s = %0*.*f", "value trash", 10, 5, M_PI );
-	printf("%0*.*d", 1, 2, 3);
+	printf("t%dgf %d", 1, 2);
 	return (0);
 }

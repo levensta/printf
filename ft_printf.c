@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 20:12:17 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/03 23:14:31 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/04 22:49:31 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ int	ft_printf(const char *format, ...)
 
 int	main ()
 {
-	ft_printf("%0*.*d", 1, 2, 3);
+	ft_printf("yes\n%0- +10.90d", 989);
 	return(0);
 }
