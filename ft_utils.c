@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:40:46 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/04 22:33:17 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/05 17:21:47 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,7 @@ int			ft_flgtrim(char *s1, char *set, int i, t_printf *specifer)
 	while (ft_memchr(set, s1[start], ft_strlen(set)))
 	{
 		if (specifer->flags)
-		{
 			free(specifer->flags);
-			specifer->flags = 0;
-		}
 		start++;
 		specifer->flags = ft_substr(s1, i, start - i);
 	}
@@ -219,14 +216,15 @@ int			ft_nlen(int n)
 		if (specifier->flags)
 			free(specifier->flags);
 		specifier->flags = 0;
-		specifier->width = 0;
+		specifier->width = -1;
 		specifier->precis = 0;
+		specifier->is_precis = 0;
 		specifier->type = 0;
 		specifier->values.di = 0;
 		specifier->values.u = 0;
 		specifier->values.c = 0;
-		if (specifier->values.s)
-			free(specifier->values.s);
+		// if (specifier->values.s)
+		// 	free(specifier->values.s);
 		specifier->values.s = 0;
 		specifier->values.p = 0;
 	}
