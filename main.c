@@ -31,6 +31,6 @@
 
 int main()
 {
-	printf("string: %.s", "hello");
+	printf("%----10.d", 123);
 	return (0);
 }

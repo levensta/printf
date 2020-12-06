@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:40:46 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/05 17:21:47 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/06 23:27:03 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,21 +123,17 @@ void		*ft_memchr(const void *s, char c, size_t n)
 
 int			ft_flgtrim(char *s1, char *set, int i, t_printf *specifer)
 {
-	unsigned int	start;
-
-	start = i;
 	if (!s1 || !set)
 		return (-1);
-	while (ft_memchr(set, s1[start], ft_strlen(set)))
+	while (ft_memchr(set, s1[i], ft_strlen(set)))
 	{
-		if (specifer->flags)
-			free(specifer->flags);
-		start++;
-		specifer->flags = ft_substr(s1, i, start - i);
+		if (s1[i] == '0')
+			specifer->flag_zero = 1;
+		if (s1[i] == '-')
+			specifer->flag_minus = 1;
+		i++;
 	}
-	// if (!(specifer->flags))
-	// 	specifer->flags = ft_strdup("");
-	return (start);
+	return (i);
 }
 
 int			ft_tptrim(char *s1, char *set, int i, t_printf *specifer) // доделать
@@ -205,17 +201,19 @@ int			ft_nlen(int n)
 
 	i = 1;
 	nb = n;
-	// check_minus = 1;
+	// if (n < 0)
+	// 	i++;
 	while (n / 10 != 0 && i++)
 		n = (n / 10);
 	return (i);
 }
 
-	void	free_spec(t_printf *specifier)
+	void	free_struct(t_printf *specifier)
 	{
-		if (specifier->flags)
-			free(specifier->flags);
-		specifier->flags = 0;
+		specifier->flag_zero = 0;
+		specifier->flag_minus = 0;
+		specifier->zero_count = 0;
+		specifier->space_count = 0;
 		specifier->width = -1;
 		specifier->precis = 0;
 		specifier->is_precis = 0;
@@ -223,8 +221,6 @@ int			ft_nlen(int n)
 		specifier->values.di = 0;
 		specifier->values.u = 0;
 		specifier->values.c = 0;
-		// if (specifier->values.s)
-		// 	free(specifier->values.s);
 		specifier->values.s = 0;
 		specifier->values.p = 0;
 	}
