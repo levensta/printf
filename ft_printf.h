@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 21:34:21 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/06 22:12:12 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/07 19:39:11 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 
 va_list		g_ptr;
+int			count_symbols;
 
 typedef struct	s_content
 {
@@ -63,5 +64,6 @@ void			free_struct(t_printf *specifier);
 int				get_value(t_printf *specifier);
 int		ft_processor(t_printf *specifier);
 void	ft_putstr(char *s);
+void	ft_putchar(char c);
 char		*ft_itoa(int n);
 #endif

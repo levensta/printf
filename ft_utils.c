@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:40:46 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/06 23:27:03 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/09 22:20:56 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,22 +208,28 @@ int			ft_nlen(int n)
 	return (i);
 }
 
-	void	free_struct(t_printf *specifier)
-	{
-		specifier->flag_zero = 0;
-		specifier->flag_minus = 0;
-		specifier->zero_count = 0;
-		specifier->space_count = 0;
-		specifier->width = -1;
-		specifier->precis = 0;
-		specifier->is_precis = 0;
-		specifier->type = 0;
-		specifier->values.di = 0;
-		specifier->values.u = 0;
-		specifier->values.c = 0;
-		specifier->values.s = 0;
-		specifier->values.p = 0;
-	}
+void	free_struct(t_printf *pf)
+{
+	pf->flag_zero = 0;
+	pf->flag_minus = 0;
+	pf->zero_count = 0;
+	pf->space_count = 0;
+	pf->width = -1;
+	pf->precis = 0;
+	pf->is_precis = 0;
+	pf->type = 0;
+	pf->values.di = 0;
+	pf->values.u = 0;
+	pf->values.c = 0;
+	pf->values.s = 0;
+	pf->values.p = 0;
+}
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+	count_symbols++;
+}
 
 
 // int		ft_printf(const char *s, ...)

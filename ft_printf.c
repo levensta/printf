@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 20:12:17 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/04 22:49:31 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/09 23:45:42 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 
 int	ft_printf(const char *format, ...)
 {
+	count_symbols = 0;
 	va_start(g_ptr, format);
 	char *s = (char *)format;
 	ft_parser(s);
-	return (0);
+	return (count_symbols);
 }
 
 int	main ()
 {
-	ft_printf("yes\n%0- +10.90d", 989);
+	// char *s = "puk";
+	ft_printf("%*.*d|\n",-10, -7, -128);
+	   printf("%*.*d|\n",-10, -7, -128);
 	return(0);
 }

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 15:23:51 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/06 23:36:10 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/09 23:44:11 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,42 +48,122 @@ void	ft_putstr(char *s)
 	{
 		write(1, &s[i], 1);
 		i++;
+		count_symbols++;
 	}
 }
 
-int		ft_processor(t_printf *specifier)
+int		ft_processor(t_printf *pf)
 {
-	if (specifier->type == 'd' || specifier->type == 'i')
+	if (pf->type == 'd' || pf->type == 'i')
 	{
 		int len;
 		int c;
 
-		len = ft_nlen(specifier->values.di);
-		if (specifier->precis < 0)
-			specifier->precis = 0;
-		c = (specifier->flag_zero && !(specifier->is_precis)) == 1 ? '0': ' '; // при флаге 0 заменяет пробелы нулями, если не указана точность
-		if (specifier->is_precis == 1 && specifier->precis >= specifier->width
-		&& specifier->precis >= len)
-			specifier->zero_count = specifier->precis - len;
-		else if (specifier->width >= len && specifier->is_precis && specifier->precis > len)
+		len = ft_nlen(pf->values.di);
+		if (pf->precis < 0)
+			pf->is_precis = 0;
+		// if (pf->values.di < 0)
+		// 	len++;
+		// при флаге 0 заменяет пробелы нулями, если не указана точность
+		if (pf->flag_minus)
+			pf->flag_zero = 0;
+		c = (!(pf->flag_minus) && pf->flag_zero && !(pf->is_precis)) == 1 ? '0': ' ';
+		if (pf->is_precis == 1 && pf->precis >= pf->width
+		&& pf->precis >= len)
+			pf->zero_count = pf->precis - len;
+		else if (pf->width >= len && pf->is_precis && pf->precis > len)
 		{
-			specifier->zero_count = specifier->precis - len;
-			specifier->space_count = specifier->width - specifier->zero_count - len;
+			pf->zero_count = pf->precis - len;
+			pf->space_count = pf->width - pf->zero_count - len;
 		}
-		else if (specifier->width > len)
-			specifier->space_count = specifier->width - len;
-		
-		while (specifier->space_count)
+		else if (pf->width > len)
+			pf->space_count = pf->width - len;
+
+			// частный случай
+		if (pf->is_precis && !(pf->precis) && !(pf->values.di))
+			pf->space_count++;
+
+
+		if (pf->values.di < 0 && pf->space_count > 0)
+			pf->space_count--;
+			// if (c == ' ')
+
+		if (pf->flag_minus)
 		{
-			write(1, &c, 1);
-			specifier->space_count--;
+			if (pf->values.di < 0)
+			{
+				ft_putchar('-');
+				pf->values.di *= -1;
+			}
+			while (pf->zero_count)
+			{
+				ft_putchar('0');
+				pf->zero_count--;
+			}
+			if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
+				ft_putstr(ft_itoa(pf->values.di));
+			while (pf->space_count)
+			{
+				ft_putchar(c);
+				pf->space_count--;
+			}
 		}
-		while (specifier->zero_count)
+		else
 		{
-			write(1, "0", 1);
-			specifier->zero_count--;
+			if (pf->values.di < 0 && pf->flag_zero)
+			{
+				ft_putchar('-');
+				pf->values.di *= -1;
+			}
+			while (pf->space_count)
+			{
+				ft_putchar(c);
+				pf->space_count--;
+			}
+			if (pf->values.di < 0 && !(pf->flag_zero))
+			{
+				ft_putchar('-');
+				pf->values.di *= -1;
+			}
+			while (pf->zero_count)
+			{
+				ft_putchar('0');
+				pf->zero_count--;
+			}
+			if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
+				ft_putstr(ft_itoa(pf->values.di));
 		}
-		ft_putstr(ft_itoa(specifier->values.di));
+		// if (pf->values.di < 0)
+		// 	ft_putchar('-');
+		// if (!(pf->flag_minus))
+		// {
+		// 	if (pf->values.di < 0 && pf->space_count > 0)
+		// 	{
+		// 		pf->values.di *= -1;
+		// 		pf->space_count--;
+		// 	}
+		// 	while (pf->space_count)
+		// 	{
+		// 		ft_putchar(c);
+		// 		pf->space_count--;
+		// 	}
+		// }
+		// while (pf->zero_count)
+		// {
+		// 	ft_putchar('0');
+		// 	pf->zero_count--;
+		// }
+		// if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
+		// 	ft_putstr(ft_itoa(pf->values.di));
+
+		// if ((pf->flag_minus))
+		// {
+		// 	while (pf->space_count)
+		// 	{
+		// 		ft_putchar(c);
+		// 		pf->space_count--;
+		// 	}
+		// }
 		
 	}
 	return (0);
