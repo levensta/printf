@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 15:23:51 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/09 23:44:11 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/10 22:58:01 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,19 @@ int		ft_processor(t_printf *pf)
 		if (pf->flag_minus)
 			pf->flag_zero = 0;
 		c = (!(pf->flag_minus) && pf->flag_zero && !(pf->is_precis)) == 1 ? '0': ' ';
-		if (pf->is_precis == 1 && pf->precis >= pf->width
-		&& pf->precis >= len)
+		if (pf->is_precis == 1 && pf->precis >= pf->width && pf->precis >= len)
 			pf->zero_count = pf->precis - len;
 		else if (pf->width >= len && pf->is_precis && pf->precis > len)
 		{
 			pf->zero_count = pf->precis - len;
 			pf->space_count = pf->width - pf->zero_count - len;
 		}
-		else if (pf->width > len)
-			pf->space_count = pf->width - len;
-
+		else if (pf->width > len) 
+			pf->space_count = pf->width - len; // > заменить на >= ??
+		// else if (pf->width != -1)
+		// 	pf->space_count = pf->width;
 			// частный случай
-		if (pf->is_precis && !(pf->precis) && !(pf->values.di))
+		if (pf->is_precis && !(pf->precis) && !(pf->values.di) && pf->width > 0)
 			pf->space_count++;
 
 
@@ -100,7 +100,9 @@ int		ft_processor(t_printf *pf)
 				ft_putchar('0');
 				pf->zero_count--;
 			}
-			if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
+			if (pf->values.di == -2147483648)
+				ft_putstr("2147483648");
+			else if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
 				ft_putstr(ft_itoa(pf->values.di));
 			while (pf->space_count)
 			{
@@ -130,7 +132,9 @@ int		ft_processor(t_printf *pf)
 				ft_putchar('0');
 				pf->zero_count--;
 			}
-			if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
+			if (pf->values.di == -2147483648)
+				ft_putstr("2147483648");
+			else if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
 				ft_putstr(ft_itoa(pf->values.di));
 		}
 		// if (pf->values.di < 0)

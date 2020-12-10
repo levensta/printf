@@ -31,9 +31,6 @@
 
 int main()
 {
-	printf("%-.7d", 128);
+	printf("|%1.d|", 0);
 	return (0);
 }
-
-if (d < 0 && space > 0)
-space--;

@@ -11,8 +11,7 @@ HEADER = -I ./
 SOURCE = 	ft_utils.c \
 			ft_parser.c \
 			ft_printf.c \
-			ft_processor.c \
-			print_dwayne.c
+			ft_processor.c
 
 OBJECT = $(SOURCE:.c=.o)
 

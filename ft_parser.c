@@ -6,12 +6,11 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 16:40:00 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/09 23:42:06 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/10 23:19:28 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "dwayne_johnson.h"
 #include <stdio.h>
 
 void	width_trim(char *format, int *i, t_printf *pf)
@@ -96,15 +95,15 @@ int	ft_parser(char *format)
 		if ((i = ft_tptrim(format, "cspdiuxX%", i, &pf)) == -1)
 		{
 			va_end(g_ptr);
-			print_dwayne();
+			write(1, "WARNING", 7);
 			return (0);
 		}
 		get_value(&pf);
-		printf("flag:%c\n", pf.flag_minus);
-		printf("%d\n", pf.width);
-		printf("%d\n", pf.precis);
-		printf("%d\n", pf.is_precis);
-		printf("%c\n", pf.type);
+		// printf("flag:%c\n", pf.flag_minus);
+		// printf("%d\n", pf.width);
+		// printf("%d\n", pf.precis);
+		// printf("%d\n", pf.is_precis);
+		// printf("%c\n", pf.type);
 		ft_processor(&pf);
 	}
 	free_struct(&pf);
