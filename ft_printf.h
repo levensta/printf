@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 21:34:21 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/07 19:39:11 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/11 21:54:56 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdio.h>
 
 va_list		g_ptr;
-int			count_symbols;
+int			g_count;
 
 typedef struct	s_content
 {
@@ -57,7 +57,7 @@ void	width_trim(char *format, int *i, t_printf *specifier);
 void	precis_trim(char *format, int *i, t_printf *specifier);
 // int		parser(char *format, int *i, t_printf *specifier);
 char			*ft_strjoin(char *s1, char *s2);
-int				ft_parser(char *format);
+int		ft_parser(char *format);
 int				ft_atoi_w(const char *str);
 int				ft_nlen(int n);
 void			free_struct(t_printf *specifier);
@@ -66,4 +66,10 @@ int		ft_processor(t_printf *specifier);
 void	ft_putstr(char *s);
 void	ft_putchar(char c);
 char		*ft_itoa(int n);
+void	proc_int(t_printf *pf);
+void	calculate_int(t_printf *pf);
+void	put_minus(t_printf *pf);
+void	print_precis(t_printf *pf);
+void	print_space(t_printf *pf, char c);
+void	print_num(t_printf *pf);
 #endif

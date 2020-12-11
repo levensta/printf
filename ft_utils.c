@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:40:46 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/09 22:20:56 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/11 21:11:25 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,11 +196,9 @@ char	*ft_strjoin(char *s1, char *s2)
 int			ft_nlen(int n)
 {
 	int		i;
-	int		nb;
 	// int		check_minus;
 
 	i = 1;
-	nb = n;
 	// if (n < 0)
 	// 	i++;
 	while (n / 10 != 0 && i++)
@@ -221,6 +219,8 @@ void	free_struct(t_printf *pf)
 	pf->values.di = 0;
 	pf->values.u = 0;
 	pf->values.c = 0;
+	if (!(pf->values.s))
+		free(pf->values.s);
 	pf->values.s = 0;
 	pf->values.p = 0;
 }
@@ -228,7 +228,7 @@ void	free_struct(t_printf *pf)
 void	ft_putchar(char c)
 {
 	write(1, &c, 1);
-	count_symbols++;
+	g_count++;
 }
 
 

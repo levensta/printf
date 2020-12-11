@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 15:23:51 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/10 22:58:01 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/11 21:10:56 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,127 +48,111 @@ void	ft_putstr(char *s)
 	{
 		write(1, &s[i], 1);
 		i++;
-		count_symbols++;
+		g_count++;
+	}
+}
+
+void	put_minus(t_printf *pf)
+{
+	ft_putchar('-');
+	pf->values.di *= -1;
+}
+
+void	print_precis(t_printf *pf)
+{
+	while (pf->zero_count)
+	{
+		ft_putchar('0');
+		pf->zero_count--;
+	}
+}
+
+void	print_space(t_printf *pf, char c)
+{
+	while (pf->space_count)
+	{
+		ft_putchar(c);
+		pf->space_count--;
+	}
+}
+
+void	print_num(t_printf *pf)
+{
+	char	*num;
+	
+	num = 0;
+	if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
+	{
+		num = ft_itoa(pf->values.di);
+		ft_putstr(num);
+	}
+	if (num)
+	{
+		free(num);
+		num = 0;
+	}
+}
+
+void	calculate_int(t_printf *pf)
+{
+	int		len;
+
+	len = ft_nlen(pf->values.di);
+	if (pf->is_precis == 1 && pf->precis >= pf->width && pf->precis >= len)
+		pf->zero_count = pf->precis - len;
+	else if (pf->width >= len && pf->is_precis && pf->precis > len)
+	{
+		pf->zero_count = pf->precis - len;
+		pf->space_count = pf->width - pf->zero_count - len;
+	}
+	else if (pf->width > len) // > заменить на >= ??
+		pf->space_count = pf->width - len;
+	if (pf->is_precis && !(pf->precis) && !(pf->values.di) && pf->width > 0) // частный случай
+		pf->space_count++;
+	if (pf->values.di < 0 && pf->space_count > 0)
+		pf->space_count--; // if (c == ' ')
+}
+
+void	proc_int(t_printf *pf)
+{
+	int		c;
+
+	if (pf->precis < 0)
+		pf->is_precis = 0;
+	if (pf->flag_minus || (pf->flag_zero && pf->is_precis))
+		pf->flag_zero = 0;
+	c = (!(pf->flag_minus) && pf->flag_zero && !(pf->is_precis)) == 1 ? '0': ' ';
+	calculate_int(pf);
+
+	if (pf->flag_minus)
+	{
+		if (pf->values.di < 0)
+			put_minus(pf);
+		print_precis(pf);
+		if (pf->values.di == -2147483648)
+			ft_putstr("2147483648");
+		else
+			print_num(pf);
+		print_space(pf, c);
+	}
+	else
+	{
+		if (pf->values.di < 0 && pf->flag_zero)
+			put_minus(pf);
+		print_space(pf, c);
+		if (pf->values.di < 0 && !(pf->flag_zero))
+			put_minus(pf);
+		print_precis(pf);
+		if (pf->values.di == -2147483648)
+			ft_putstr("2147483648");
+		else
+			print_num(pf);
 	}
 }
 
 int		ft_processor(t_printf *pf)
 {
 	if (pf->type == 'd' || pf->type == 'i')
-	{
-		int len;
-		int c;
-
-		len = ft_nlen(pf->values.di);
-		if (pf->precis < 0)
-			pf->is_precis = 0;
-		// if (pf->values.di < 0)
-		// 	len++;
-		// при флаге 0 заменяет пробелы нулями, если не указана точность
-		if (pf->flag_minus)
-			pf->flag_zero = 0;
-		c = (!(pf->flag_minus) && pf->flag_zero && !(pf->is_precis)) == 1 ? '0': ' ';
-		if (pf->is_precis == 1 && pf->precis >= pf->width && pf->precis >= len)
-			pf->zero_count = pf->precis - len;
-		else if (pf->width >= len && pf->is_precis && pf->precis > len)
-		{
-			pf->zero_count = pf->precis - len;
-			pf->space_count = pf->width - pf->zero_count - len;
-		}
-		else if (pf->width > len) 
-			pf->space_count = pf->width - len; // > заменить на >= ??
-		// else if (pf->width != -1)
-		// 	pf->space_count = pf->width;
-			// частный случай
-		if (pf->is_precis && !(pf->precis) && !(pf->values.di) && pf->width > 0)
-			pf->space_count++;
-
-
-		if (pf->values.di < 0 && pf->space_count > 0)
-			pf->space_count--;
-			// if (c == ' ')
-
-		if (pf->flag_minus)
-		{
-			if (pf->values.di < 0)
-			{
-				ft_putchar('-');
-				pf->values.di *= -1;
-			}
-			while (pf->zero_count)
-			{
-				ft_putchar('0');
-				pf->zero_count--;
-			}
-			if (pf->values.di == -2147483648)
-				ft_putstr("2147483648");
-			else if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
-				ft_putstr(ft_itoa(pf->values.di));
-			while (pf->space_count)
-			{
-				ft_putchar(c);
-				pf->space_count--;
-			}
-		}
-		else
-		{
-			if (pf->values.di < 0 && pf->flag_zero)
-			{
-				ft_putchar('-');
-				pf->values.di *= -1;
-			}
-			while (pf->space_count)
-			{
-				ft_putchar(c);
-				pf->space_count--;
-			}
-			if (pf->values.di < 0 && !(pf->flag_zero))
-			{
-				ft_putchar('-');
-				pf->values.di *= -1;
-			}
-			while (pf->zero_count)
-			{
-				ft_putchar('0');
-				pf->zero_count--;
-			}
-			if (pf->values.di == -2147483648)
-				ft_putstr("2147483648");
-			else if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
-				ft_putstr(ft_itoa(pf->values.di));
-		}
-		// if (pf->values.di < 0)
-		// 	ft_putchar('-');
-		// if (!(pf->flag_minus))
-		// {
-		// 	if (pf->values.di < 0 && pf->space_count > 0)
-		// 	{
-		// 		pf->values.di *= -1;
-		// 		pf->space_count--;
-		// 	}
-		// 	while (pf->space_count)
-		// 	{
-		// 		ft_putchar(c);
-		// 		pf->space_count--;
-		// 	}
-		// }
-		// while (pf->zero_count)
-		// {
-		// 	ft_putchar('0');
-		// 	pf->zero_count--;
-		// }
-		// if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
-		// 	ft_putstr(ft_itoa(pf->values.di));
-
-		// if ((pf->flag_minus))
-		// {
-		// 	while (pf->space_count)
-		// 	{
-		// 		ft_putchar(c);
-		// 		pf->space_count--;
-		// 	}
-		// }
-		
-	}
+		proc_int (pf);
 	return (0);
 }
