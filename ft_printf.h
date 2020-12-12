@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 21:34:21 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/11 21:54:56 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/12 20:26:10 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ typedef struct	s_content
 	char			c;
 	char			*s;
 	long long		p;
-	// unsigned int	x;
-	// unsigned int	X;
+	unsigned int	xX;
 }				t_content;
 
 typedef struct	s_printf
@@ -66,10 +65,12 @@ int		ft_processor(t_printf *specifier);
 void	ft_putstr(char *s);
 void	ft_putchar(char c);
 char		*ft_itoa(int n);
-void	proc_int(t_printf *pf);
+void	proc_num(t_printf *pf);
 void	calculate_int(t_printf *pf);
 void	put_minus(t_printf *pf);
-void	print_precis(t_printf *pf);
-void	print_space(t_printf *pf, char c);
+void	put_precis(t_printf *pf);
+void	put_space(t_printf *pf, char c);
 void	print_num(t_printf *pf);
+void	print_hex(t_printf *pf, char c);
+char		*ft_itoa_16(unsigned int n, char type);
 #endif

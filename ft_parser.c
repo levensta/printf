@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 16:40:00 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/11 22:10:04 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/12 20:26:25 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void	precis_trim(char *format, int *i, t_printf *pf)
 
 int	get_value(t_printf *pf)
 {
-	if (pf->type == 'd')
+	if (pf->type == 'd' || pf->type == 'i')
 		pf->values.di = va_arg(g_ptr, int);
-	if (pf->type == 'i')
-		pf->values.di = va_arg(g_ptr, int);
+	if (pf->type == 'x' || pf->type == 'X')
+		pf->values.xX = va_arg(g_ptr, unsigned int);
 	if (pf->type == 'u')
 		pf->values.u = va_arg(g_ptr, unsigned int);
 	if (pf->type == 'c')
