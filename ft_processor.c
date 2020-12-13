@@ -6,13 +6,13 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 15:23:51 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/13 21:49:51 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/13 22:17:52 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char		*ft_itoa_16(unsigned long long n, char type)
+char	*ft_itoa_16(unsigned long long n, char type)
 {
 	int					i;
 	int					base;
@@ -22,7 +22,7 @@ char		*ft_itoa_16(unsigned long long n, char type)
 	i = 1;
 	nb = n;
 	base = (type == 'u') ? 10 : 16;
-	while ((n / base ) != 0 && i++)
+	while ((n / base) != 0 && i++)
 		n = (n / base);
 	if (!(str = (char *)malloc((i + 1))))
 		return (NULL);
@@ -40,7 +40,7 @@ char		*ft_itoa_16(unsigned long long n, char type)
 	return (str);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	int		i;
 	int		nb;
@@ -132,26 +132,6 @@ void	print_num(t_printf *pf)
 	}
 }
 
-// void	calculate_int(t_printf *pf)
-// {
-// 	int		len;
-
-// 	len = ft_nlen(pf->values.di);
-// 	if (pf->is_precis == 1 && pf->precis >= pf->width && pf->precis >= len)
-// 		pf->zero_count = pf->precis - len;
-// 	else if (pf->width >= len && pf->is_precis && pf->precis > len)
-// 	{
-// 		pf->zero_count = pf->precis - len;
-// 		pf->space_count = pf->width - pf->zero_count - len;
-// 	}
-// 	else if (pf->width > len) // > заменить на >= ??
-// 		pf->space_count = pf->width - len;
-// 	if (pf->is_precis && !(pf->precis) && !(pf->values.di) && pf->width > 0) // частный случай
-// 		pf->space_count++;
-// 	if (pf->values.di < 0 && pf->space_count > 0)
-// 		pf->space_count--; // if (c == ' ')
-// }
-
 void	calculate_int(t_printf *pf)
 {
 	int	len;
@@ -166,12 +146,12 @@ void	calculate_int(t_printf *pf)
 		pf->zero_count = pf->precis - len;
 		pf->space_count = pf->width - pf->zero_count - len;
 	}
-	else if (pf->width > len) // > заменить на >= ??
+	else if (pf->width > len)
 		pf->space_count = pf->width - len;
-	if (pf->is_precis && !(pf->precis) && !(num) && pf->width > 0) // частный случай
+	if (pf->is_precis && !(pf->precis) && !(num) && pf->width > 0)
 		pf->space_count++;
 	if (num < 0 && pf->space_count > 0)
-		pf->space_count--; // if (c == ' ')
+		pf->space_count--;
 }
 
 void	calculate_unsigned(t_printf *pf)
@@ -191,12 +171,10 @@ void	calculate_unsigned(t_printf *pf)
 		pf->zero_count = pf->precis - len;
 		pf->space_count = pf->width - pf->zero_count - len;
 	}
-	else if (pf->width > len) // > заменить на >= ??
+	else if (pf->width > len)
 		pf->space_count = pf->width - len;
-	if (pf->is_precis && !(pf->precis) && !(num) && pf->width > 0) // частный случай
+	if (pf->is_precis && !(pf->precis) && !(num) && pf->width > 0)
 		pf->space_count++;
-	// if (num < 0 && pf->space_count > 0)
-	// 	pf->space_count--; // if (c == ' ')
 }
 
 void	print_int(t_printf *pf, char c)
@@ -272,7 +250,6 @@ void	print_str(t_printf *pf, int len)
 			i++;
 		}
 	}
-	
 }
 
 void	proc_num(t_printf *pf)
@@ -322,7 +299,8 @@ void	proc_c(t_printf *pf)
 	if (pf->type == '%')
 	{
 		pf->values.c = '%';
-		c = (!(pf->flag_minus) && pf->flag_zero && !(pf->is_precis)) ? '0' : ' ';
+		c = (!(pf->flag_minus) && pf->flag_zero && !(pf->is_precis)) ? \
+		'0' : ' ';
 	}
 	if (pf->width > 1)
 		pf->space_count = pf->width - 1;

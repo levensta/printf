@@ -6,36 +6,11 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:40:46 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/13 20:44:11 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/13 22:12:35 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "ft_printf.h"
-
-// char		*ft_strccpy(char *source, char c)
-// {
-// 	int		i;
-// 	int		j;
-// 	char	*dest;
-
-// 	i = 0;
-// 	j = 0;
-// 	if (source == NULL)
-// 		return (0);
-// 	while (source[i] != c)
-// 		i++;
-// 	if (!(dest = malloc(i + 1)))
-// 		return (NULL);
-// 	while (source[j] != c)
-// 	{
-// 		dest[j] = source[j];
-// 		j++;
-// 	}
-// 		dest[j] = '\0';
-// 	return (dest);
-// }
 
 size_t	ft_strlen(const char *str)
 {
@@ -47,7 +22,7 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-void		*ft_memchr(const void *s, char c, size_t n)
+void	*ft_memchr(const void *s, char c, size_t n)
 {
 	size_t	i;
 	char	*str;
@@ -63,8 +38,7 @@ void		*ft_memchr(const void *s, char c, size_t n)
 	return (NULL);
 }
 
-
-int			ft_flgtrim(char *s1, char *set, int i, t_printf *specifer)
+int		ft_flgtrim(char *s1, char *set, int i, t_printf *specifer)
 {
 	if (!s1 || !set)
 		return (-1);
@@ -79,7 +53,7 @@ int			ft_flgtrim(char *s1, char *set, int i, t_printf *specifer)
 	return (i);
 }
 
-int			ft_tptrim(char *s1, char *set, int i, t_printf *specifer) // доделать
+int		ft_tptrim(char *s1, char *set, int i, t_printf *specifer)
 {
 	if (!s1 || !set)
 		return (-1);
@@ -92,7 +66,7 @@ int			ft_tptrim(char *s1, char *set, int i, t_printf *specifer) // додела�
 	return (-1);
 }
 
-int			ft_atoi_w(const char *str)
+int		ft_atoi_w(const char *str)
 {
 	int i;
 	int nb;
@@ -112,20 +86,17 @@ int			ft_atoi_w(const char *str)
 	return (nb);
 }
 
-int			ft_nlen(int n)
+int		ft_nlen(int n)
 {
 	int		i;
-	// int		check_minus;
 
 	i = 1;
-	// if (n < 0)
-	// 	i++;
 	while (n / 10 != 0 && i++)
 		n = (n / 10);
 	return (i);
 }
 
-int			ft_nlen_precis(const char *str)
+int		ft_nlen_precis(const char *str)
 {
 	int i;
 	int nb;
@@ -140,7 +111,7 @@ int			ft_nlen_precis(const char *str)
 	return (i);
 }
 
-int			ft_nlen_unsigned(t_printf *pf, unsigned long long n)
+int		ft_nlen_unsigned(t_printf *pf, unsigned long long n)
 {
 	int		i;
 	char	*num;
@@ -176,8 +147,6 @@ void	free_struct(t_printf *pf)
 	pf->values.di = 0;
 	pf->values.u = 0;
 	pf->values.c = 0;
-	if (!(pf->values.s))
-		free(pf->values.s);
 	pf->values.s = 0;
 	pf->values.p = 0;
 }
@@ -187,13 +156,3 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 	g_count++;
 }
-
-
-// int		ft_printf(const char *s, ...)
-// {
-// 	va_list	ptr;
-// 	int		num;
-
-// 	va_start(ptr, s);
-// 	num = va_arg(ptr, int);
-// 	num = va_arg(ptr, int);
