@@ -6,34 +6,36 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 15:23:51 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/12 20:29:55 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/13 21:49:51 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char		*ft_itoa_16(unsigned int n, char type)
+char		*ft_itoa_16(unsigned long long n, char type)
 {
-	int				i;
-	unsigned int	nb;
-	char			*str;
+	int					i;
+	int					base;
+	unsigned long long	nb;
+	char				*str;
 
 	i = 1;
 	nb = n;
-	while ((n / 16 ) != 0 && i++)
-		n = (n / 16);
+	base = (type == 'u') ? 10 : 16;
+	while ((n / base ) != 0 && i++)
+		n = (n / base);
 	if (!(str = (char *)malloc((i + 1))))
 		return (NULL);
 	str[i] = '\0';
 	while (i-- > 0)
 	{
-		if (nb % 16 < 10)
-			str[i] = (nb % 16) + '0';
-		else if (type == 'x')
-			str[i] = (nb % 16) - 10 + ('a');
+		if (nb % base < 10)
+			str[i] = (nb % base) + '0';
+		else if (type == 'x' || type == 'p')
+			str[i] = (nb % base) - 10 + ('a');
 		else if (type == 'X')
-			str[i] = (nb % 16) - 10 + ('A');
-		nb = nb / 16;
+			str[i] = (nb % base) - 10 + ('A');
+		nb = nb / base;
 	}
 	return (str);
 }
@@ -104,19 +106,25 @@ void	put_space(t_printf *pf, char c)
 
 void	print_num(t_printf *pf)
 {
-	char	*num;
+	char		*num;
 
 	num = 0;
-	if (pf->type == 'x'|| pf->type == 'X')
+	if (pf->type == 'd' || pf->type == 'i')
 	{
-		num = ft_itoa_16(pf->values.xX, pf->type);
-		ft_putstr(num);
+		if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
+			num = ft_itoa(pf->values.di);
 	}
-	else if (!(pf->is_precis && !(pf->precis) && !(pf->values.di)))
+	else if (pf->type == 'x' || pf->type == 'X' || pf->type == 'p')
 	{
-		num = ft_itoa(pf->values.di);
-		ft_putstr(num);
+		if (!(pf->is_precis && !(pf->precis) && !(pf->values.xXp)))
+			num = ft_itoa_16(pf->values.xXp, pf->type);
 	}
+	else if (pf->type == 'u')
+	{
+		if (!(pf->is_precis && !(pf->precis) && !(pf->values.u)))
+			num = ft_itoa_16(pf->values.u, pf->type);
+	}
+	ft_putstr(num);
 	if (num)
 	{
 		free(num);
@@ -124,11 +132,33 @@ void	print_num(t_printf *pf)
 	}
 }
 
+// void	calculate_int(t_printf *pf)
+// {
+// 	int		len;
+
+// 	len = ft_nlen(pf->values.di);
+// 	if (pf->is_precis == 1 && pf->precis >= pf->width && pf->precis >= len)
+// 		pf->zero_count = pf->precis - len;
+// 	else if (pf->width >= len && pf->is_precis && pf->precis > len)
+// 	{
+// 		pf->zero_count = pf->precis - len;
+// 		pf->space_count = pf->width - pf->zero_count - len;
+// 	}
+// 	else if (pf->width > len) // > заменить на >= ??
+// 		pf->space_count = pf->width - len;
+// 	if (pf->is_precis && !(pf->precis) && !(pf->values.di) && pf->width > 0) // частный случай
+// 		pf->space_count++;
+// 	if (pf->values.di < 0 && pf->space_count > 0)
+// 		pf->space_count--; // if (c == ' ')
+// }
+
 void	calculate_int(t_printf *pf)
 {
-	int		len;
+	int	len;
+	int	num;
 
-	len = ft_nlen(pf->values.di);
+	num = pf->values.di;
+	len = ft_nlen(num);
 	if (pf->is_precis == 1 && pf->precis >= pf->width && pf->precis >= len)
 		pf->zero_count = pf->precis - len;
 	else if (pf->width >= len && pf->is_precis && pf->precis > len)
@@ -138,17 +168,22 @@ void	calculate_int(t_printf *pf)
 	}
 	else if (pf->width > len) // > заменить на >= ??
 		pf->space_count = pf->width - len;
-	if (pf->is_precis && !(pf->precis) && !(pf->values.di) && pf->width > 0) // частный случай
+	if (pf->is_precis && !(pf->precis) && !(num) && pf->width > 0) // частный случай
 		pf->space_count++;
-	if (pf->values.di < 0 && pf->space_count > 0)
+	if (num < 0 && pf->space_count > 0)
 		pf->space_count--; // if (c == ' ')
 }
 
-void	calculate_hex(t_printf *pf)
+void	calculate_unsigned(t_printf *pf)
 {
-	int		len;
+	int					len;
+	unsigned long long	num;
 
-	len = ft_nlen(pf->values.xX);
+	num = (pf->type == 'x' || pf->type == 'X' || pf->type == 'p') ? \
+	pf->values.xXp : pf->values.u;
+	len = ft_nlen_unsigned(pf, num);
+	if (pf->type == 'p')
+		len += 2;
 	if (pf->is_precis == 1 && pf->precis >= pf->width && pf->precis >= len)
 		pf->zero_count = pf->precis - len;
 	else if (pf->width >= len && pf->is_precis && pf->precis > len)
@@ -158,10 +193,10 @@ void	calculate_hex(t_printf *pf)
 	}
 	else if (pf->width > len) // > заменить на >= ??
 		pf->space_count = pf->width - len;
-	if (pf->is_precis && !(pf->precis) && !(pf->values.xX) && pf->width > 0) // частный случай
+	if (pf->is_precis && !(pf->precis) && !(num) && pf->width > 0) // частный случай
 		pf->space_count++;
-	if (pf->values.xX < 0 && pf->space_count > 0)
-		pf->space_count--; // if (c == ' ')
+	// if (num < 0 && pf->space_count > 0)
+	// 	pf->space_count--; // if (c == ' ')
 }
 
 void	print_int(t_printf *pf, char c)
@@ -192,20 +227,52 @@ void	print_int(t_printf *pf, char c)
 	}
 }
 
-void	print_hex(t_printf *pf, char c)
+void	print_unsigned(t_printf *pf, char c)
 {
 	if (pf->flag_minus)
 	{
-		put_precis(pf);
+		if (pf->type == 'p')
+			ft_putstr("0x");
+		else
+			put_precis(pf);
 		print_num(pf);
 		put_space(pf, c);
 	}
 	else
 	{
 		put_space(pf, c);
-		put_precis(pf);
+		if (pf->type == 'p')
+			ft_putstr("0x");
+		else
+			put_precis(pf);
 		print_num(pf);
 	}
+}
+
+void	print_str(t_printf *pf, int len)
+{
+	int	i;
+
+	i = 0;
+	if (pf->flag_minus)
+	{
+		while (pf->values.s[i] && i < len)
+		{
+			ft_putchar(pf->values.s[i]);
+			i++;
+		}
+		put_space(pf, ' ');
+	}
+	else
+	{
+		put_space(pf, ' ');
+		while (pf->values.s[i] && i < len)
+		{
+			ft_putchar(pf->values.s[i]);
+			i++;
+		}
+	}
+	
 }
 
 void	proc_num(t_printf *pf)
@@ -222,18 +289,63 @@ void	proc_num(t_printf *pf)
 		calculate_int(pf);
 		print_int(pf, c);
 	}
-	if (pf->type == 'x' || pf->type == 'X')
+	else if (pf->type == 'x' || pf->type == 'X' || \
+	pf->type == 'u' || pf->type == 'p')
 	{
-		calculate_hex(pf);
-		print_hex(pf, c);
+		calculate_unsigned(pf);
+		print_unsigned(pf, c);
+	}
+}
+
+void	proc_str(t_printf *pf)
+{
+	int	len;
+
+	if (pf->type == 's')
+	{
+		len = ft_strlen(pf->values.s);
+		if (pf->precis < 0)
+			pf->is_precis = 0;
+		if (pf->is_precis && pf->precis < len)
+			len = pf->precis;
+		if (pf->width > len)
+			pf->space_count = pf->width - len;
+		print_str(pf, len);
+	}
+}
+
+void	proc_c(t_printf *pf)
+{
+	int c;
+
+	c = ' ';
+	if (pf->type == '%')
+	{
+		pf->values.c = '%';
+		c = (!(pf->flag_minus) && pf->flag_zero && !(pf->is_precis)) ? '0' : ' ';
+	}
+	if (pf->width > 1)
+		pf->space_count = pf->width - 1;
+	if (pf->flag_minus)
+	{
+		ft_putchar(pf->values.c);
+		put_space(pf, c);
+	}
+	else
+	{
+		put_space(pf, c);
+		ft_putchar(pf->values.c);
 	}
 }
 
 int		ft_processor(t_printf *pf)
 {
-	if (pf->type == 'd' || pf->type == 'i')
+	if (pf->type == 'd' || pf->type == 'i' || pf->type == 'p' \
+	|| pf->type == 'x' || pf->type == 'X' || pf->type == 'u')
 		proc_num(pf);
-	if (pf->type == 'x' || pf->type == 'X')
-		proc_num(pf);
+	if (pf->type == 's')
+		proc_str(pf);
+	if (pf->type == 'c' || pf->type == '%')
+		proc_c(pf);
 	return (0);
 }

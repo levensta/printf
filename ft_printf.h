@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 21:34:21 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/12 20:26:10 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/13 20:44:43 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ int			g_count;
 
 typedef struct	s_content
 {
-	int				di;
-	unsigned int	u;
-	char			c;
-	char			*s;
-	long long		p;
-	unsigned int	xX;
+	int					di;
+	unsigned int		u;
+	unsigned long long	xXp;
+	char				c;
+	char				*s;
+	unsigned long long	p;
 }				t_content;
 
 typedef struct	s_printf
@@ -59,6 +59,7 @@ char			*ft_strjoin(char *s1, char *s2);
 int		ft_parser(char *format);
 int				ft_atoi_w(const char *str);
 int				ft_nlen(int n);
+int				ft_nlen_precis(const char *str);
 void			free_struct(t_printf *specifier);
 int				get_value(t_printf *specifier);
 int		ft_processor(t_printf *specifier);
@@ -71,6 +72,10 @@ void	put_minus(t_printf *pf);
 void	put_precis(t_printf *pf);
 void	put_space(t_printf *pf, char c);
 void	print_num(t_printf *pf);
-void	print_hex(t_printf *pf, char c);
-char		*ft_itoa_16(unsigned int n, char type);
+void	print_unsigned(t_printf *pf, char c);
+int			ft_nlen_unsigned(t_printf *pf, unsigned long long n);
+char		*ft_itoa_16(unsigned long long n, char type);
+void	proc_str(t_printf *pf);
+void	print_str(t_printf *pf, int len);
+void	proc_c(t_printf *pf);
 #endif

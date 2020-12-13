@@ -97,8 +97,8 @@
 
 int main()
 {
-	printf("|%x|\n", -255);
-	printf("|%s|\n", ft_itoa_16(-255, "abcdef"));
+	// char	*s = "sdfs";
+	printf("%5%");
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 16:40:00 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/12 20:26:25 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/13 20:44:32 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void	precis_trim(char *format, int *i, t_printf *pf)
 		pf->is_precis = 1;
 		if (format[*i] == '*')
 		{
-			pf->precis = va_arg(g_ptr, int); // обработать 0 и - в processor'e
+			pf->precis = va_arg(g_ptr, int);
 			(*i)++;
 		}
 		else if (format[*i] >= '0' && format[*i] <= '9')
 		{
 			pf->precis = ft_atoi_w(&format[*i]);
-			*i = *i + ft_nlen(ft_atoi_w(&format[*i]));
+			*i = *i + ft_nlen_precis(&format[*i]);
 		}
 		else
 		pf->precis = 0;
@@ -58,15 +58,17 @@ int	get_value(t_printf *pf)
 	if (pf->type == 'd' || pf->type == 'i')
 		pf->values.di = va_arg(g_ptr, int);
 	if (pf->type == 'x' || pf->type == 'X')
-		pf->values.xX = va_arg(g_ptr, unsigned int);
+		pf->values.xXp = va_arg(g_ptr, unsigned int);
+	if (pf->type == 'p')
+		pf->values.xXp = va_arg(g_ptr, unsigned long long);
 	if (pf->type == 'u')
 		pf->values.u = va_arg(g_ptr, unsigned int);
 	if (pf->type == 'c')
 		pf->values.c = (char)va_arg(g_ptr, int);
 	if (pf->type == 's')
 		pf->values.s = va_arg(g_ptr, char*);
-	if (pf->type == 'p')
-		pf->values.p = va_arg(g_ptr, long long);
+	if (pf->values.s == NULL)
+		pf->values.s = "(null)";
 	return (0);
 }
 
@@ -83,11 +85,15 @@ int	ft_parser(char *format)
 		if (format[i] != '%')
 		{
 			while (format[i] != '%' && format[i])
-				ft_putchar(format[i++]); // & ??
-				// write(1, &format[i++], 1);
-				// g_count++;
+				ft_putchar(format[i++]);
 			if (format[i] == 0)
 				break;
+		}
+		if (format[i + 1] == '%')
+		{
+			ft_putchar('%');
+			i += 2;
+			continue ;
 		}
 		i = ft_flgtrim(format, "0-", ++i, &pf);
 		width_trim(format, &i, &pf);
@@ -99,11 +105,6 @@ int	ft_parser(char *format)
 			return (0);
 		}
 		get_value(&pf);
-		// printf("flag:%c\n", pf.flag_minus);
-		// printf("%d\n", pf.width);
-		// printf("%d\n", pf.precis);
-		// printf("%d\n", pf.is_precis);
-		// printf("%c\n", pf.type);
 		ft_processor(&pf);
 		free_struct(&pf);
 	}

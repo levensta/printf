@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 20:12:17 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/12 20:30:06 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/13 21:44:32 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	ft_printf(const char *format, ...)
 
 // int	main ()
 // {
-// 	// char	c = 'a';
 // 	// int		d = 2147483647;
 // 	// int		e = -2147483648;
 // 	// int		i = 8;
@@ -32,7 +31,8 @@ int	ft_printf(const char *format, ...)
 // 	// int		k = 123456789;
 // 	// int		l = 0;
 // 	// int		m = -12345678;
-// 	ft_printf("|%d|\n", 255);
-// 	   printf("|%d|\n", 255);
+// 	// int n = 4294;
+// 	ft_printf("|%5%|\n");
+// 	   printf("|%5%|\n");
 // 	return(0);
 // }

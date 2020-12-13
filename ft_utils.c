@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 20:40:46 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/11 21:11:25 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/13 20:44:11 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,63 +45,6 @@ size_t	ft_strlen(const char *str)
 	while (str && str[i] != '\0')
 		i++;
 	return (i);
-}
-
-int		tofind_c(char *s, char c)
-{
-	int	i;
-
-	i = -1;
-	if (s)
-	{
-		while (s[++i])
-		{
-			if (s[i] == c)
-				return (i);
-		}
-	}
-	return (-1);
-}
-
-char		*ft_strdup(const char *s1)
-{
-	size_t	i;
-	char	*s2;
-
-	i = 0;
-	if (!(s2 = malloc((ft_strlen(s1) + 1) * sizeof(char))))
-		return (NULL);
-	while (s1[i] != '\0')
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = '\0';
-	return (s2);
-}
-
-char	*ft_substr(char const *s, unsigned int start, int len)
-{
-	char	*s2;
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	if (s && start >= ft_strlen(s))
-		return (ft_strdup(""));
-	if (start + len > ft_strlen(s))
-		len = ft_strlen(s) - start;
-	if (!(s2 = malloc(len + 1 * sizeof(char))))
-		return (NULL);
-	while (i < len)
-	{
-		s2[i] = s[start];
-		i++;
-		start++;
-	}
-	s2[i] = '\0';
-	return (s2);
 }
 
 void		*ft_memchr(const void *s, char c, size_t n)
@@ -169,30 +112,6 @@ int			ft_atoi_w(const char *str)
 	return (nb);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*str;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	if (!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
-		return (NULL);
-	while (s1[i])
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
-		str[i++] = s2[j++];
-	str[i] = '\0';
-	free(s1);
-	return (str);
-}
-
 int			ft_nlen(int n)
 {
 	int		i;
@@ -203,6 +122,44 @@ int			ft_nlen(int n)
 	// 	i++;
 	while (n / 10 != 0 && i++)
 		n = (n / 10);
+	return (i);
+}
+
+int			ft_nlen_precis(const char *str)
+{
+	int i;
+	int nb;
+
+	i = 0;
+	nb = 0;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		nb = (nb * 10) + (str[i] - '0');
+		i++;
+	}
+	return (i);
+}
+
+int			ft_nlen_unsigned(t_printf *pf, unsigned long long n)
+{
+	int		i;
+	char	*num;
+
+	i = 1;
+	num = 0;
+	if (pf->type == 'u')
+		while (n / 10 != 0 && i++)
+			n = (n / 10);
+	else
+	{
+		num = ft_itoa_16(pf->values.xXp, pf->type);
+		i = ft_strlen(num);
+	}
+	if (num)
+	{
+		free(num);
+		num = 0;
+	}
 	return (i);
 }
 
