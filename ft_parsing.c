@@ -1,28 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/25 20:12:17 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/14 00:44:24 by levensta         ###   ########.fr       */
+/*   Created: 2020/11/28 16:40:00 by levensta          #+#    #+#             */
+/*   Updated: 2020/12/14 00:32:00 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int		ft_printf(const char *format, ...)
+int		ft_parsing(char *format, t_printf *pf)
 {
-	char		*s;
-	t_printf	pf;
+	int			i;
 
-	g_count = 0;
-	s = (char *)format;
-	va_start(g_ptr, format);
-	free_struct(&pf);
-	if ((ft_parsing(s, &pf)) == 0)
-		return (0);
-	va_end(g_ptr);
-	return (g_count);
+	i = 0;
+	while (format[i])
+	{
+		if (format[i] != '%')
+		{
+			while (format[i] != '%' && format[i])
+				ft_putchar(format[i++]);
+			if (format[i] == 0)
+				break ;
+		}
+		if (format[i + 1] == '%')
+		{
+			ft_putchar('%');
+			i += 2;
+			continue ;
+		}
+		if ((get_specifier(format, &i, pf)) == 0)
+			return (0);
+		ft_processor(pf);
+		free_struct(pf);
+	}
+	return (1);
 }

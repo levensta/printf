@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/25 20:12:17 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/14 00:44:24 by levensta         ###   ########.fr       */
+/*   Created: 2020/12/13 23:56:40 by levensta          #+#    #+#             */
+/*   Updated: 2020/12/14 00:42:11 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int		ft_printf(const char *format, ...)
+int		ft_atoi(const char *str)
 {
-	char		*s;
-	t_printf	pf;
+	int i;
+	int nb;
+	int amount;
 
-	g_count = 0;
-	s = (char *)format;
-	va_start(g_ptr, format);
-	free_struct(&pf);
-	if ((ft_parsing(s, &pf)) == 0)
-		return (0);
-	va_end(g_ptr);
-	return (g_count);
+	i = 0;
+	nb = 0;
+	amount = 0;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		nb = (nb * 10) + (str[i] - '0');
+		amount += (nb == 0) ? 0 : 1;
+		if (amount > 19)
+			return (-1);
+		i++;
+	}
+	return (nb);
 }

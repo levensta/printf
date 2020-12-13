@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 21:34:21 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/13 20:44:43 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:48:10 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,19 @@
 # define FT_PRINTF_H
 
 # include <unistd.h>
-# include <string.h>
 # include <stdlib.h>
 # include <stdarg.h>
-# include <stdio.h>
 
-va_list		g_ptr;
 int			g_count;
+va_list		g_ptr;
 
 typedef struct	s_content
 {
 	int					di;
 	unsigned int		u;
-	unsigned long long	xXp;
+	unsigned long long	xxp;
 	char				c;
 	char				*s;
-	unsigned long long	p;
 }				t_content;
 
 typedef struct	s_printf
@@ -46,36 +43,36 @@ typedef struct	s_printf
 }				t_printf;
 
 int				ft_printf(const char *format, ...);
-size_t			ft_strlen(const char *str);
-int				tofind_c(char *s, char c);
-void			*ft_memchr(const void *s, char c, size_t n);
-char			*ft_substr(char const *s, unsigned int start, int len);
+void			free_struct(t_printf *specifier);
+int				ft_parsing(char *format, t_printf *pf);
+int				get_value(t_printf *specifier);
+int				get_specifier(char *format, int *i, t_printf *pf);
 int				ft_flgtrim(char *s1, char *set, int i, t_printf *specifer);
 int				ft_tptrim(char *s1, char *set, int i, t_printf *specifer);
-void	width_trim(char *format, int *i, t_printf *specifier);
-void	precis_trim(char *format, int *i, t_printf *specifier);
-// int		parser(char *format, int *i, t_printf *specifier);
-char			*ft_strjoin(char *s1, char *s2);
-int		ft_parser(char *format);
-int				ft_atoi_w(const char *str);
+void			width_trim(char *format, int *i, t_printf *specifier);
+void			precis_trim(char *format, int *i, t_printf *specifier);
 int				ft_nlen(int n);
 int				ft_nlen_precis(const char *str);
-void			free_struct(t_printf *specifier);
-int				get_value(t_printf *specifier);
-int		ft_processor(t_printf *specifier);
-void	ft_putstr(char *s);
-void	ft_putchar(char c);
-char		*ft_itoa(int n);
-void	proc_num(t_printf *pf);
-void	calculate_int(t_printf *pf);
-void	put_minus(t_printf *pf);
-void	put_precis(t_printf *pf);
-void	put_space(t_printf *pf, char c);
-void	print_num(t_printf *pf);
-void	print_unsigned(t_printf *pf, char c);
-int			ft_nlen_unsigned(t_printf *pf, unsigned long long n);
-char		*ft_itoa_16(unsigned long long n, char type);
-void	proc_str(t_printf *pf);
-void	print_str(t_printf *pf, int len);
-void	proc_c(t_printf *pf);
+size_t			ft_strlen(const char *str);
+void			*ft_memchr(const void *s, char c, size_t n);
+int				ft_atoi(const char *str);
+
+int				ft_processor(t_printf *specifier);
+void			proc_num(t_printf *pf);
+void			proc_str(t_printf *pf);
+void			proc_c(t_printf *pf);
+void			calculate_int(t_printf *pf);
+void			calculate_unsigned(t_printf *pf);
+int				ft_nlen_unsigned(t_printf *pf, unsigned long long n);
+void			print_num(t_printf *pf);
+void			print_int(t_printf *pf, char c);
+void			print_unsigned(t_printf *pf, char c);
+void			print_str(t_printf *pf, int len);
+char			*ft_itoa(int n);
+char			*ft_itoa_16(unsigned long long n, char type);
+void			ft_putstr(char *s);
+void			ft_putchar(char c);
+void			put_minus(t_printf *pf);
+void			put_precis(t_printf *pf);
+void			put_space(t_printf *pf, char c);
 #endif

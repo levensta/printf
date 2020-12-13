@@ -1,28 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/25 20:12:17 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/14 00:44:24 by levensta         ###   ########.fr       */
+/*   Created: 2020/12/13 23:53:45 by levensta          #+#    #+#             */
+/*   Updated: 2020/12/14 00:42:16 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int		ft_printf(const char *format, ...)
+char	*ft_itoa(int n)
 {
-	char		*s;
-	t_printf	pf;
+	int		i;
+	int		nb;
+	char	*str;
+	int		check_minus;
 
-	g_count = 0;
-	s = (char *)format;
-	va_start(g_ptr, format);
-	free_struct(&pf);
-	if ((ft_parsing(s, &pf)) == 0)
-		return (0);
-	va_end(g_ptr);
-	return (g_count);
+	i = 1;
+	nb = n;
+	check_minus = 1;
+	while (n / 10 != 0 && i++)
+		n = (n / 10);
+	if (nb < 0 && i++)
+		check_minus = -1;
+	if (!(str = (char *)malloc((i + 1))))
+		return (NULL);
+	str[i] = '\0';
+	while (i-- > 0)
+	{
+		str[i] = (nb % 10) * check_minus + '0';
+		nb = nb / 10;
+	}
+	if (check_minus == -1)
+		str[++i] = '-';
+	return (str);
 }

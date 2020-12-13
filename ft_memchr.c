@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/25 20:12:17 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/14 00:44:24 by levensta         ###   ########.fr       */
+/*   Created: 2020/12/13 23:57:33 by levensta          #+#    #+#             */
+/*   Updated: 2020/12/14 00:25:40 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int		ft_printf(const char *format, ...)
+void	*ft_memchr(const void *s, char c, size_t n)
 {
-	char		*s;
-	t_printf	pf;
+	size_t	i;
+	char	*str;
 
-	g_count = 0;
-	s = (char *)format;
-	va_start(g_ptr, format);
-	free_struct(&pf);
-	if ((ft_parsing(s, &pf)) == 0)
-		return (0);
-	va_end(g_ptr);
-	return (g_count);
+	if (n != 0)
+	{
+		i = -1;
+		str = (char *)s;
+		while (++i < n)
+			if (str[i] == c)
+				return (&str[i]);
+	}
+	return (NULL);
 }
