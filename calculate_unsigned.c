@@ -6,7 +6,7 @@
 /*   By: levensta <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 23:41:05 by levensta          #+#    #+#             */
-/*   Updated: 2020/12/14 00:48:47 by levensta         ###   ########.fr       */
+/*   Updated: 2020/12/17 22:17:16 by levensta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ void	calculate_unsigned(t_printf *pf)
 	}
 	else if (pf->width > len)
 		pf->space_count = pf->width - len;
-	if (pf->is_precis && !(pf->precis) && !(num) && pf->width > 0)
-		pf->space_count++;
+	if (pf->type == 'p')
+		if (pf->is_precis && !pf->precis && !num && pf->width > 2)
+			pf->space_count++;
+	if (!(pf->type == 'p'))
+		if (pf->is_precis && !pf->precis && !num && pf->width > 0)
+			pf->space_count++;
 }
